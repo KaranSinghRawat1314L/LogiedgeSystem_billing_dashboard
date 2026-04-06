@@ -10,7 +10,6 @@ import AddItem        from "./pages/AddItem";
 import BillingPage    from "./pages/BillingPage";
 import InvoiceView    from "./pages/InvoiceView";
 
-// SVG icons matching the mockup sidebar icons
 const DashboardIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -40,13 +39,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-
-        {/* Navy top bar */}
         <div className="top-header" />
 
         <div className="body-wrapper">
-
-          {/* Left sidebar - 3 nav items matching mockup */}
           <aside className="sidebar">
             <NavLink
               to="/"
@@ -80,28 +75,19 @@ export default function App() {
             </NavLink>
           </aside>
 
-          {/* Main content area */}
           <main className="main-content">
             <Routes>
-              {/* Dashboard */}
-              <Route path="/"                   element={<DashboardPage />} />
+              <Route path="/" element={<DashboardPage />} />
               <Route path="/invoice/:invoiceId" element={<InvoiceView />} />
-
-              {/* Master module */}
-              <Route path="/master"             element={<MasterPage />} />
-              <Route path="/master/customers"   element={<CustomerList />} />
+              <Route path="/master" element={<MasterPage />} />
+              <Route path="/master/customers" element={<CustomerList />} />
               <Route path="/master/customers/add" element={<AddCustomer />} />
-              <Route path="/master/items"       element={<ItemList />} />
-              <Route path="/master/items/add"   element={<AddItem />} />
-
-              {/* Billing */}
-              <Route path="/billing"            element={<BillingPage />} />
-
-              {/* Fallback */}
+              <Route path="/master/items" element={<ItemList />} />
+              <Route path="/master/items/add" element={<AddItem />} />
+              <Route path="/billing" element={<BillingPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
-
         </div>
       </div>
     </BrowserRouter>
