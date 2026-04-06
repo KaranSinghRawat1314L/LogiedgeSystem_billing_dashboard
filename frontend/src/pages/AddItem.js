@@ -69,7 +69,6 @@ export default function AddItem() {
         </p>
       )}
 
-      {/* 2-column form grid (matches mockup image7) */}
       <div className="form-grid">
 
         {/* Item Name */}
