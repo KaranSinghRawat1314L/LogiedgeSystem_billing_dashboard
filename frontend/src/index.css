@@ -1,0 +1,703 @@
+/* =====================================================
+   LogiEdge Billing Dashboard - Global Styles
+   Matching the provided Figma design mockups exactly
+   ===================================================== */
+
+/* Google Font - clean professional look */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Design Tokens ---- */
+:root {
+  --navy:        #1e2260;   /* header + active sidebar highlight */
+  --navy-dark:   #181b52;
+  --blue-accent: #1e56a0;
+  --sidebar-bg:  #ffffff;
+  --content-bg:  #f5f6fa;
+  --white:       #ffffff;
+  --text-dark:   #1a1a2e;
+  --text-grey:   #555770;
+  --text-light:  #888;
+  --border:      #e0e0e0;
+
+  --active-badge-bg:   #d4f5d4;
+  --active-badge-text: #1a7f1a;
+  --inactive-badge-bg:   #ffd6d6;
+  --inactive-badge-text: #c0392b;
+
+  --btn-primary-bg:   #1e2260;
+  --btn-primary-text: #ffffff;
+  --btn-cancel-text:  #e74c3c;
+  --btn-cancel-border:#e74c3c;
+
+  --sidebar-width: 140px;
+  --header-height: 50px;
+
+  --shadow-card: 0 1px 6px rgba(0,0,0,0.10);
+  --radius-card: 10px;
+  --radius-btn:  6px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--content-bg);
+  color: var(--text-dark);
+  font-size: 14px;
+}
+
+/* =====================================================
+   LAYOUT
+   ===================================================== */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Navy top header bar */
+.top-header {
+  height: var(--header-height);
+  background: var(--navy);
+  flex-shrink: 0;
+  /* color : white;
+  padding-top: .5%;
+  padding-left: 5%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; or 700 */
+}
+
+/* Below header: sidebar + content */
+.body-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Left sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 20px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text-grey);
+  font-size: 12px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-nav-item:hover {
+  background: #f0f1ff;
+  color: var(--navy);
+}
+
+.sidebar-nav-item.active {
+  border-left-color: #4a90e2;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.sidebar-nav-item .nav-icon {
+  font-size: 20px;
+}
+
+/* Main scrollable content area */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+}
+
+/* =====================================================
+   PAGE HEADERS
+   ===================================================== */
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  border-radius: var(--radius-btn);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.88; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn-cancel {
+  background: transparent;
+  color: var(--btn-cancel-text);
+  border-color: var(--btn-cancel-border);
+}
+
+/* Circle ADD button (+ ADD) */
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 24px;
+  background: var(--navy);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+.btn-add:hover { opacity: 0.88; }
+
+.btn-add-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* View button in table */
+.btn-view {
+  padding: 6px 16px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-view:hover { opacity: 0.85; }
+
+/* =====================================================
+   CARD GRID  (Customers / Items)
+   ===================================================== */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.master-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 22px 20px 16px;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: box-shadow 0.18s, transform 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
+}
+.master-card:hover {
+  box-shadow: 0 4px 18px rgba(30,34,96,0.13);
+  transform: translateY(-2px);
+}
+
+.master-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.35;
+}
+
+/* Active / In-Active badge */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  align-self: flex-end;
+}
+.badge-active {
+  background: var(--active-badge-bg);
+  color: var(--active-badge-text);
+}
+.badge-inactive {
+  background: var(--inactive-badge-bg);
+  color: var(--inactive-badge-text);
+}
+
+/* Greyed card for inactive items in select dialog */
+.master-card.inactive-card {
+  background: #f2f2f2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =====================================================
+   MASTER PAGE  (2 cards on landing)
+   ===================================================== */
+
+.master-module-cards {
+  display: flex;
+  gap: 24px;
+}
+
+.master-module-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 24px 28px;
+  width: 220px;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: box-shadow 0.18s;
+}
+.master-module-card:hover { box-shadow: 0 4px 16px rgba(30,34,96,0.12); }
+.master-module-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.master-module-card p  { font-size: 12px; color: var(--text-grey); }
+
+/* =====================================================
+   DASHBOARD TABLE
+   ===================================================== */
+
+.search-bar {
+  margin-bottom: 20px;
+}
+.search-bar input {
+  width: 380px;
+  max-width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  background: var(--white);
+  outline: none;
+  color: var(--text-dark);
+  box-shadow: var(--shadow-card);
+}
+.search-bar input:focus { border-color: var(--navy); }
+.search-bar input::placeholder { color: var(--text-light); }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.data-table thead tr {
+  background: var(--navy);
+  color: #fff;
+}
+.data-table th {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 13px 18px;
+  font-size: 13px;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: #f7f8ff; }
+
+/* =====================================================
+   BILLING PAGE
+   ===================================================== */
+
+.billing-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.billing-section-header {
+  background: #f0f1f5;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Blue underline variant when customer selected */
+.billing-section-header.selected {
+  border-bottom: 2px solid #4a90e2;
+}
+
+.billing-section-body {
+  padding: 20px;
+}
+
+/* Customer info rows inside billing */
+.customer-info-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.customer-info-row .info-label {
+  color: var(--text-grey);
+  min-width: 80px;
+}
+.customer-info-row .info-value {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.customer-info-row .colon { color: var(--text-grey); }
+
+/* Items table inside billing */
+.billing-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0;
+}
+.billing-items-table th {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.billing-items-table td {
+  padding: 11px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.billing-items-table tbody tr:last-child td { border-bottom: 1px solid var(--border); }
+
+.billing-total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Quantity stepper (+ n -) */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid var(--navy);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.qty-stepper button {
+  width: 28px;
+  height: 28px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+.qty-stepper button:hover { opacity: 0.85; }
+.qty-stepper .qty-value {
+  min-width: 28px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 6px;
+  color: var(--text-dark);
+}
+
+/* Billing action buttons row */
+.billing-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Center ADD button */
+.add-btn-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+}
+
+/* =====================================================
+   DIALOGS / MODALS
+   ===================================================== */
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog-box {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px 36px;
+  width: 700px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  position: relative;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.dialog-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-grey);
+  line-height: 1;
+  padding: 4px;
+}
+.dialog-close:hover { color: var(--text-dark); }
+
+/* Grid inside dialogs for customer/item cards */
+.dialog-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Item card in select-items dialog */
+.item-select-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.item-select-card .item-card-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.item-select-card .item-card-bottom {
+  display: flex;
+  justify-content: flex-end;
+}
+.item-select-card.inactive-card { background: #f0f0f0; }
+
+/* ADD button inside item card (small outline) */
+.btn-item-add {
+  padding: 5px 16px;
+  border: 1.5px solid var(--navy);
+  color: var(--navy);
+  background: transparent;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-item-add:hover { background: var(--navy); color: #fff; }
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* =====================================================
+   FORM  (Add Customer / Add Item)
+   ===================================================== */
+
+.form-page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.form-input,
+.form-select {
+  padding: 10px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 6px;
+  background: #f7f7f7;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus,
+.form-select:focus  { border-color: var(--navy); background: #fff; }
+
+.form-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+/* Error text */
+.error-text {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: -4px;
+}
+
+/* =====================================================
+   INVOICE DETAIL (view in Dashboard)
+   ===================================================== */
+
+.invoice-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.invoice-id-display {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* =====================================================
+   EMPTY / LOADING STATES
+   ===================================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.loading-text {
+  color: var(--text-grey);
+  font-size: 13px;
+  padding: 20px 0;
+}
+
+/* =====================================================
+   MISC UTILITIES
+   ===================================================== */
+
+.text-bold  { font-weight: 700; }
+.text-grey  { color: var(--text-grey); }
+.text-right { text-align: right; }
+.mt-8  { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.flex  { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-8  { gap: 8px; }
+.gap-16 { gap: 16px; }
