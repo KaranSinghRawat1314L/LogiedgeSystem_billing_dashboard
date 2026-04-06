@@ -110,7 +110,6 @@ export default function Billing() {
         {error && <Alert type="error" onClose={() => setError('')}>{error}</Alert>}
         {success && <Alert type="success">{success}</Alert>}
 
-        {/* Step 1: Customer Selection */}
         <div className="card mb-24">
           <div className="card-title">Step 1 — Select Customer</div>
           <div className="form-grid form-grid-2">
@@ -154,11 +153,9 @@ export default function Billing() {
           </div>
         </div>
 
-        {/* Step 2: Line Items */}
         <div className="card mb-24">
           <div className="card-title">Step 2 — Select Items</div>
 
-          {/* Header row */}
           <div className="item-row item-row-header">
             <span>Item</span>
             <span>Qty</span>
@@ -225,7 +222,6 @@ export default function Billing() {
           </div>
         </div>
 
-        {/* Step 3: Notes + Summary */}
         <div className="flex gap-24" style={{ alignItems: 'flex-start' }}>
           <div style={{ flex: 1 }}>
             <div className="card">
