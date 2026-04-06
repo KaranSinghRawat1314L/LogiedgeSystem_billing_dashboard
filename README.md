@@ -8,15 +8,15 @@ A full-stack billing web application built with **React JS**, **Node.js + Expres
 
 ```
 logedge/
-├── database.sql              ← Run this first to set up the DB
+├── database.sql              ← Run this to set up local DB schema + seed data
 ├── README.md
 │
 ├── backend/                  ← Back-End Server
 │   ├── server.js             ← Express entry point
 │   ├── package.json
-│   ├── .env.example          ← Copy to .env and fill in your DB credentials
+│   ├── .env.example          ← Copy to .env and fill in your credentials
 │   ├── db/
-│   │   └── pool.js           ← PostgreSQL connection pool
+│   │   └── pool.js           ← PostgreSQL connection pool (local + Neon)
 │   ├── controllers/
 │   │   ├── customerController.js
 │   │   ├── itemController.js
@@ -51,18 +51,34 @@ logedge/
 
 ## Tech Stack
 
-| Layer    | Technology              |
-|----------|-------------------------|
-| Frontend | React 18, React Router v6, Axios |
-| Backend  | Node.js, Express.js     |
-| Database | PostgreSQL               |
-| Styling  | Custom CSS (no UI library) |
+| Layer    | Technology                              |
+|----------|-----------------------------------------|
+| Frontend | React 18, React Router v6, Axios        |
+| Backend  | Node.js, Express.js                     |
+| Database | PostgreSQL — Neon (prod) / local (dev)  |
+| Styling  | Custom CSS (no UI library)              |
+| Hosting  | Vercel (frontend) + Render (backend)    |
 
 ---
 
-## Setup Instructions
+## Database
 
-### Step 1 — Database
+This project uses **two database setups** depending on the environment:
+
+| Environment | Database          | How it connects              |
+|-------------|-------------------|------------------------------|
+| Local dev   | Local PostgreSQL   | Host/port/user/password vars |
+| Production  | Neon (cloud)      | `DATABASE_URL` connection string with SSL |
+
+`pool.js` automatically detects which to use:
+- If `DATABASE_URL` is set → connects to Neon with SSL
+- Otherwise → connects to local PostgreSQL using individual env vars
+
+---
+
+## Local Development Setup
+
+### Step 1 — Database (local PostgreSQL)
 
 Make sure PostgreSQL is installed and running, then:
 
@@ -78,30 +94,69 @@ This creates the `logedge_db` database, all tables, and seeds sample data.
 cd backend
 npm install
 
-# Copy the example env file and fill in your DB password
 cp .env.example .env
-# Edit .env: set DB_PASSWORD=your_actual_password
-
-# Start the server
-npm run dev       # development (uses nodemon for auto-restart)
-# or
-npm start         # production
+# Edit .env with your local DB credentials (no DATABASE_URL needed locally)
 ```
 
-The API server starts on **http://localhost:5000**
+Your local `.env`:
+```
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=logedge_db
+DB_USER=postgres
+DB_PASSWORD=your_local_password
+FRONTEND_URL=http://localhost:3000
+```
+
+```bash
+npm run dev    # starts on http://localhost:5000
+```
 
 ### Step 3 — Frontend
 
 ```bash
 cd frontend
 npm install
-npm start
+npm start      # starts on http://localhost:3000
 ```
 
-The app opens on **http://localhost:3000**
+> In development, keep `"proxy": "http://localhost:5000"` in `frontend/package.json`
+> and do **not** set `REACT_APP_API_URL` locally — the proxy handles it.
 
-The `"proxy": "http://localhost:5000"` in `frontend/package.json` automatically
-routes all `/api/*` requests to the backend — no CORS issues in development.
+---
+
+## Production Deployment
+
+### Backend on Render
+
+Set these environment variables in Render → your backend service → Environment:
+
+```
+DATABASE_URL  = postgresql://user:password@host.neon.tech/dbname?sslmode=require
+FRONTEND_URL  = https://your-app.vercel.app
+NODE_ENV      = production
+PORT          = 5000
+```
+
+> Get `DATABASE_URL` from your Neon dashboard → Connection Details → Connection string.
+
+To seed production data, run `database.sql` against your Neon DB:
+```bash
+psql "your-neon-connection-string" -f database.sql
+```
+
+### Frontend on Vercel
+
+Set this environment variable in Vercel → your project → Settings → Environment Variables:
+
+```
+REACT_APP_API_URL = https://your-backend-name.onrender.com/api
+```
+
+Then go to **Deployments → Redeploy** so Vercel bakes the new env var into the build.
+
+> Remove `"proxy"` from `frontend/package.json` before deploying to Vercel.
 
 ---
 
@@ -118,42 +173,42 @@ routes all `/api/*` requests to the backend — no CORS issues in development.
 - **Items** — view all items as cards (Active / In-Active), add new items
 
 ### Billing Module
-- Select a customer (only Active customers are clickable)
+- Select a customer (only Active customers are selectable)
 - Select items with quantity stepper (+ n −)
-- **GST Logic**: If customer has a GST number → no GST added. If no GST number → 18% GST added on subtotal
-- Invoice ID is auto-generated: `INVC` + 6 random digits (e.g. `INVC224830`), guaranteed unique
-- After creating, the invoice is displayed with the Invoice ID
+- **GST Logic**: customer with GST number → 0% GST. Customer without → 18% GST on subtotal
+- Invoice ID auto-generated: `INVC` + 6 random digits (e.g. `INVC224830`), guaranteed unique
+- After creating, invoice is displayed with the Invoice ID
 
 ---
 
 ## API Endpoints
 
 ### Customers
-| Method | Endpoint         | Description        |
-|--------|------------------|--------------------|
-| GET    | /api/customers   | Get all customers  |
-| POST   | /api/customers   | Create a customer  |
+| Method | Endpoint       | Description       |
+|--------|----------------|-------------------|
+| GET    | /api/customers | Get all customers |
+| POST   | /api/customers | Create a customer |
 
 ### Items
-| Method | Endpoint     | Description    |
-|--------|--------------|----------------|
-| GET    | /api/items   | Get all items  |
-| POST   | /api/items   | Create an item |
+| Method | Endpoint   | Description    |
+|--------|------------|----------------|
+| GET    | /api/items | Get all items  |
+| POST   | /api/items | Create an item |
 
 ### Invoices
-| Method | Endpoint                          | Description                       |
-|--------|-----------------------------------|-----------------------------------|
-| GET    | /api/invoices                     | Get all invoices (recent first)   |
-| GET    | /api/invoices/:invoiceId          | Get one invoice by ID             |
-| GET    | /api/invoices/customer/:custId    | Get invoices for one customer     |
-| POST   | /api/invoices                     | Create a new invoice              |
+| Method | Endpoint                       | Description                     |
+|--------|--------------------------------|---------------------------------|
+| GET    | /api/invoices                  | Get all invoices (recent first) |
+| GET    | /api/invoices/:invoiceId       | Get one invoice by ID           |
+| GET    | /api/invoices/customer/:custId | Get invoices for one customer   |
+| POST   | /api/invoices                  | Create a new invoice            |
 
 ---
 
 ## GST Logic
 
 ```
-Customer has GST Number  →  GST Rate = 0%   (B2B, reverse charge)
+Customer has GST Number  →  GST Rate = 0%   (GST registered, no tax added)
 Customer has no GST Num  →  GST Rate = 18%  (applied on subtotal)
 ```
 
@@ -161,7 +216,17 @@ Customer has no GST Num  →  GST Rate = 18%  (applied on subtotal)
 
 ## Invoice ID Format
 
-Auto-generated as `INVC` + 6 random digits = 10 characters total  
+Auto-generated as `INVC` + 6 random digits = 10 characters total.
 Example: `INVC224830`, `INVC591034`, `INVC774423`
 
 Uniqueness is guaranteed by checking the database before inserting.
+
+---
+
+## Notes
+
+- **Render free tier**: the backend spins down after ~15 min of inactivity.
+  The first request after a cold start may take 30–60 seconds to respond.
+  This is normal on the free plan.
+- **Neon free tier**: 0.5 GB storage, auto-suspends after 5 min of inactivity
+  but wakes up automatically on the next query (usually < 1 second).
