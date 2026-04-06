@@ -125,7 +125,6 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
                     // Inactive badge (greyed, no button)
                     <span className="badge badge-inactive">In-Active</span>
                   ) : qty > 0 ? (
-                    // Quantity stepper: + n - (matches mockup image11)
                     <div className="qty-stepper">
                       <button onClick={() => handleIncrease(item.id)}>+</button>
                       <span className="qty-value">{qty}</span>
@@ -161,9 +160,7 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
   );
 }
 
-// ─────────────────────────────────────────────────
 // Main Billing Page
-// ─────────────────────────────────────────────────
 export default function BillingPage() {
   const navigate = useNavigate();
 
@@ -265,7 +262,7 @@ export default function BillingPage() {
           quantity: li.quantity,
         })),
       });
-      // Store created invoice data to show in final view (image13)
+      // Store created invoice data to show in final view
       setCreatedInvoice(result.data);
     } catch (err) {
       setApiError(err.response?.data?.message || "Failed to create invoice");
@@ -276,15 +273,13 @@ export default function BillingPage() {
 
   if (loadingData) return <p className="loading-text">Loading billing data...</p>;
 
-  // ══════════════════════════════════════════════════════════════════
-  // POST-CREATION VIEW (image13): shows the confirmed invoice
-  // ══════════════════════════════════════════════════════════════════
+  // shows the confirmed invoice
   if (createdInvoice) {
     return (
       <div>
         <h1 className="page-title">Billing</h1>
 
-        {/* Customer Details with Invoice ID (matches image13 — blue border) */}
+        {/* Customer Details with Invoice ID */}
         <div className="billing-section">
           <div className="billing-section-header selected" style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Customer Details</span>
@@ -322,7 +317,7 @@ export default function BillingPage() {
           </div>
         </div>
 
-        {/* Items table (matches image13) */}
+        {/* Items table */}
         <div className="billing-section">
           <div className="billing-section-header">Items</div>
           <div className="billing-section-body">
@@ -392,9 +387,7 @@ export default function BillingPage() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════
-  // BILLING FORM (image8 → image10 → image12)
-  // ══════════════════════════════════════════════════════════════════
+  // BILLING FORM 
   return (
     <div>
       <h1 className="page-title">Billing</h1>
@@ -418,7 +411,7 @@ export default function BillingPage() {
 
         <div className="billing-section-body">
           {!selectedCustomer ? (
-            // No customer yet: show big ADD button (image8)
+            // No customer yet: show big ADD button
             <div className="add-btn-center">
               <button
                 className="btn-add"
@@ -429,7 +422,7 @@ export default function BillingPage() {
               </button>
             </div>
           ) : (
-            // Customer selected: show their info (image10 / image12)
+            // Customer selected: show their info
             <div>
               <div className="customer-info-row">
                 <span className="info-label">Name</span>
@@ -477,7 +470,7 @@ export default function BillingPage() {
           <div className="billing-section-body">
 
             {billingItems.length === 0 ? (
-              // No items yet: show big ADD button (image10)
+              // No items yet: show big ADD button
               <div className="add-btn-center">
                 <button
                   className="btn-add"
@@ -488,7 +481,7 @@ export default function BillingPage() {
                 </button>
               </div>
             ) : (
-              // Items selected: show table with qty stepper + total (image12)
+              // Items selected: show table with qty stepper + total
               <>
                 <table className="billing-items-table">
                   <thead>
@@ -506,7 +499,7 @@ export default function BillingPage() {
                         <tr key={li.item_id}>
                           <td>{li.item.name}</td>
                           <td style={{ textAlign: "center" }}>
-                            {/* Quantity stepper (matches image12) */}
+                            {/* Quantity stepper*/}
                             <div
                               className="qty-stepper"
                               style={{ display: "inline-flex" }}
@@ -583,7 +576,7 @@ export default function BillingPage() {
         </div>
       )}
 
-      {/* ── Cancel / Create buttons (image12) ── */}
+      {/* ── Cancel / Create buttons── */}
       {selectedCustomer && billingItems.length > 0 && (
         <div className="billing-actions">
           <button className="btn btn-cancel" onClick={handleCancel}>
