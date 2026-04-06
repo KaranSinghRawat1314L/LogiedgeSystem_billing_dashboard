@@ -73,7 +73,6 @@ export default function AddCustomer() {
         </p>
       )}
 
-      {/* 2-column form grid (matches mockup image5) */}
       <div className="form-grid">
 
         {/* Customer Name */}
@@ -125,7 +124,6 @@ export default function AddCustomer() {
             value={form.gst_number}
             onChange={(e) => handleChange("gst_number", e.target.value.toUpperCase())}
           />
-          {/* No error here — GST is optional */}
         </div>
 
         {/* Customer Status */}
@@ -143,7 +141,7 @@ export default function AddCustomer() {
 
       </div>
 
-      {/* Cancel / Create buttons (matches mockup) */}
+      {/* Cancel / Create buttons */}
       <div className="form-actions">
         <button className="btn btn-cancel" onClick={handleCancel}>
           Cancel
