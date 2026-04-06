@@ -103,7 +103,7 @@ export default function Billing() {
       <div className="page-header">
         <div>
           <h1 className="page-title">New Invoice</h1>
-          <p className="page-subtitle">Generate a billing invoice for a customer</p>
+          <p className="page-subtitle">Generate a billing invoice for customer</p>
         </div>
       </div>
       <div className="page-body">
@@ -111,7 +111,7 @@ export default function Billing() {
         {success && <Alert type="success">{success}</Alert>}
 
         <div className="card mb-24">
-          <div className="card-title">Step 1 — Select Customer</div>
+          <div className="card-title">Step 1 — Select a Customer</div>
           <div className="form-grid form-grid-2">
             <div className="form-group">
               <label className="form-label">Customer <span className="required">*</span></label>
