@@ -4,9 +4,10 @@ import { fetchCustomers } from "../services/api";
 
 export default function CustomerList() {
   const navigate = useNavigate();
+
   const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState("");
 
   useEffect(() => {
     fetchCustomers()
@@ -17,6 +18,7 @@ export default function CustomerList() {
 
   return (
     <div>
+      {/* Header row with ADD button (matches mockup) */}
       <div className="page-header-row">
         <h1 className="page-title" style={{ margin: 0 }}>CUSTOMERS</h1>
         <button
@@ -28,7 +30,7 @@ export default function CustomerList() {
         </button>
       </div>
 
-      {error && <p style={{ color: "#e74c3c", fontSize: 13 }}>{error}</p>}
+      {error   && <p style={{ color: "#e74c3c", fontSize: 13 }}>{error}</p>}
       {loading && <p className="loading-text">Loading customers...</p>}
 
       {!loading && customers.length === 0 && (
@@ -37,6 +39,7 @@ export default function CustomerList() {
         </div>
       )}
 
+      {/* 3-column card grid (matches mockup image4) */}
       {!loading && customers.length > 0 && (
         <div className="cards-grid">
           {customers.map((customer) => (
