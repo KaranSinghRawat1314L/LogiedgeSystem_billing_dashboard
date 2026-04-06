@@ -2,30 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCustomers, fetchItems, createInvoice } from "../services/api";
 
-// ─────────────────────────────────────────────────
-// Sub-component: Select Customer Dialog (image9)
-// ─────────────────────────────────────────────────
 function SelectCustomerDialog({ customers, onSelect, onCancel }) {
   return (
     <div className="dialog-overlay">
       <div className="dialog-box">
-
         <div className="dialog-header">
           <h2 className="dialog-title">Select Customer</h2>
           <button className="btn btn-cancel" onClick={onCancel}>
             Cancel
           </button>
         </div>
-
         <div className="dialog-cards-grid">
           {customers.map((customer) => {
             const isActive = customer.status === "Active";
             return (
               <div
                 key={customer.id}
-                className={
-                  "master-card" + (isActive ? "" : " inactive-card")
-                }
+                className={"master-card" + (isActive ? "" : " inactive-card")}
                 onClick={() => isActive && onSelect(customer)}
                 style={{ cursor: isActive ? "pointer" : "not-allowed" }}
               >
@@ -41,19 +34,12 @@ function SelectCustomerDialog({ customers, onSelect, onCancel }) {
             );
           })}
         </div>
-
       </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────
-// Sub-component: Select Items Dialog (image11)
-// Shows active items with + qty − stepper
-// Inactive items are greyed out and not selectable
-// ─────────────────────────────────────────────────
 function SelectItemsDialog({ items, onConfirm, onCancel }) {
-  // selectedItems: { [item_id]: quantity }
   const [selected, setSelected] = useState({});
 
   const handleAdd = (item) => {
@@ -71,7 +57,6 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
     setSelected((prev) => {
       const newQty = prev[itemId] - 1;
       if (newQty <= 0) {
-        // Remove item from selection
         const updated = { ...prev };
         delete updated[itemId];
         return updated;
@@ -81,7 +66,6 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
   };
 
   const handleConfirm = () => {
-    // Build array of { item_id, quantity } for selected items
     const selectedList = Object.entries(selected)
       .filter(([, qty]) => qty > 0)
       .map(([item_id, quantity]) => {
@@ -99,15 +83,13 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
   return (
     <div className="dialog-overlay">
       <div className="dialog-box">
-
         <div className="dialog-header">
           <h2 className="dialog-title">Select Items</h2>
         </div>
-
         <div className="dialog-cards-grid">
           {items.map((item) => {
             const isActive = item.status === "Active";
-            const qty      = selected[item.id] || 0;
+            const qty = selected[item.id] || 0;
 
             return (
               <div
@@ -117,29 +99,19 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
                 }
               >
                 <div className="item-card-name">{item.name}</div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "#666",
-                    marginBottom: 4,
-                  }}
-                >
+                <div style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
                   ₹{Number(item.selling_price).toLocaleString("en-IN")}
                 </div>
-
                 <div className="item-card-bottom">
                   {!isActive ? (
-                    // Inactive badge (greyed, no button)
                     <span className="badge badge-inactive">In-Active</span>
                   ) : qty > 0 ? (
-                    // Quantity stepper: + n - (matches mockup image11)
                     <div className="qty-stepper">
                       <button onClick={() => handleIncrease(item.id)}>+</button>
                       <span className="qty-value">{qty}</span>
                       <button onClick={() => handleDecrease(item.id)}>−</button>
                     </div>
                   ) : (
-                    // ADD button before selecting
                     <button
                       className="btn-item-add"
                       onClick={() => handleAdd(item)}
@@ -152,8 +124,6 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
             );
           })}
         </div>
-
-        {/* Dialog footer: Cancel + ADD */}
         <div className="dialog-footer">
           <button className="btn btn-cancel" onClick={onCancel}>
             Cancel
@@ -162,31 +132,23 @@ function SelectItemsDialog({ items, onConfirm, onCancel }) {
             ADD
           </button>
         </div>
-
       </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────
-// Main Billing Page
-// ─────────────────────────────────────────────────
 export default function BillingPage() {
   const navigate = useNavigate();
-
-  const [customers,           setCustomers]           = useState([]);
-  const [items,               setItems]               = useState([]);
-  const [loadingData,         setLoadingData]         = useState(true);
-
-  const [selectedCustomer,    setSelectedCustomer]    = useState(null);
-  const [billingItems,        setBillingItems]        = useState([]); // [{item_id, quantity, item}]
-
-  const [showSelectCustomer,  setShowSelectCustomer]  = useState(false);
-  const [showSelectItems,     setShowSelectItems]     = useState(false);
-
-  const [createdInvoice,      setCreatedInvoice]      = useState(null); // set after API success
-  const [saving,              setSaving]              = useState(false);
-  const [apiError,            setApiError]            = useState("");
+  const [customers, setCustomers] = useState([]);
+  const [items, setItems] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [billingItems, setBillingItems] = useState([]);
+  const [showSelectCustomer, setShowSelectCustomer] = useState(false);
+  const [showSelectItems, setShowSelectItems] = useState(false);
+  const [createdInvoice, setCreatedInvoice] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   useEffect(() => {
     Promise.all([fetchCustomers(), fetchItems()])
@@ -198,44 +160,37 @@ export default function BillingPage() {
       .finally(() => setLoadingData(false));
   }, []);
 
-  // ---- Customer selection ----
   const handleSelectCustomer = (customer) => {
     setSelectedCustomer(customer);
-    // Reset items when customer changes
     setBillingItems([]);
     setCreatedInvoice(null);
     setApiError("");
     setShowSelectCustomer(false);
   };
 
-  // ---- Items confirmed from dialog ----
   const handleItemsConfirmed = (selectedList) => {
     setBillingItems(selectedList);
     setShowSelectItems(false);
   };
 
-  // ---- Quantity change in billing summary table ----
   const handleQtyChange = (itemId, delta) => {
     setBillingItems((prev) =>
       prev
         .map((li) =>
-          li.item_id === itemId
-            ? { ...li, quantity: li.quantity + delta }
-            : li
+          li.item_id === itemId ? { ...li, quantity: li.quantity + delta } : li
         )
         .filter((li) => li.quantity > 0)
     );
   };
 
-  // ---- Calculate totals ----
   const subtotal = billingItems.reduce(
     (sum, li) => sum + parseFloat(li.item.selling_price) * li.quantity,
     0
   );
 
   const isGSTRegistered = selectedCustomer && selectedCustomer.gst_number;
-  const gstAmount       = isGSTRegistered ? 0 : subtotal * 0.18;
-  const totalAmount     = subtotal + gstAmount;
+  const gstAmount = isGSTRegistered ? 0 : subtotal * 0.18;
+  const totalAmount = subtotal + gstAmount;
 
   const formatAmount = (n) =>
     Number(n).toLocaleString("en-IN", {
@@ -243,7 +198,6 @@ export default function BillingPage() {
       minimumFractionDigits: 2,
     });
 
-  // ---- Cancel (reset entire billing form) ----
   const handleCancel = () => {
     setSelectedCustomer(null);
     setBillingItems([]);
@@ -251,7 +205,6 @@ export default function BillingPage() {
     setApiError("");
   };
 
-  // ---- Create Invoice ----
   const handleCreate = async () => {
     if (!selectedCustomer) {
       setApiError("Please select a customer first");
@@ -261,18 +214,16 @@ export default function BillingPage() {
       setApiError("Please add at least one item");
       return;
     }
-
     setSaving(true);
     setApiError("");
     try {
       const result = await createInvoice({
         customer_id: selectedCustomer.id,
         items: billingItems.map((li) => ({
-          item_id:  li.item_id,
+          item_id: li.item_id,
           quantity: li.quantity,
         })),
       });
-      // Store created invoice data to show in final view (image13)
       setCreatedInvoice(result.data);
     } catch (err) {
       setApiError(err.response?.data?.message || "Failed to create invoice");
@@ -282,18 +233,15 @@ export default function BillingPage() {
   };
 
   if (loadingData) return <p className="loading-text">Loading billing data...</p>;
-
-  // ══════════════════════════════════════════════════════════════════
-  // POST-CREATION VIEW (image13): shows the confirmed invoice
-  // ══════════════════════════════════════════════════════════════════
   if (createdInvoice) {
     return (
       <div>
         <h1 className="page-title">Billing</h1>
-
-        {/* Customer Details with Invoice ID (matches image13 — blue border) */}
         <div className="billing-section">
-          <div className="billing-section-header selected" style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            className="billing-section-header selected"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             <span>Customer Details</span>
             <span className="invoice-id-display">
               Invoice ID: <strong>{createdInvoice.invoice_id}</strong>
@@ -328,8 +276,6 @@ export default function BillingPage() {
             </div>
           </div>
         </div>
-
-        {/* Items table (matches image13) */}
         <div className="billing-section">
           <div className="billing-section-header">Items</div>
           <div className="billing-section-body">
@@ -353,8 +299,6 @@ export default function BillingPage() {
                 ))}
               </tbody>
             </table>
-
-            {/* GST row if applicable */}
             {createdInvoice.gst_rate > 0 && (
               <div
                 style={{
@@ -372,26 +316,17 @@ export default function BillingPage() {
                 </span>
               </div>
             )}
-
             <div className="billing-total-row">
               <span>Total</span>
               <span>{formatAmount(createdInvoice.total_amount)}</span>
             </div>
           </div>
         </div>
-
-        {/* Actions after creation */}
         <div className="billing-actions">
-          <button
-            className="btn btn-cancel"
-            onClick={handleCancel}
-          >
+          <button className="btn btn-cancel" onClick={handleCancel}>
             New Invoice
           </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate("/")}
-          >
+          <button className="btn btn-primary" onClick={() => navigate("/")}>
             Go to Dashboard
           </button>
         </div>
@@ -399,9 +334,6 @@ export default function BillingPage() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════
-  // BILLING FORM (image8 → image10 → image12)
-  // ══════════════════════════════════════════════════════════════════
   return (
     <div>
       <h1 className="page-title">Billing</h1>
@@ -412,20 +344,14 @@ export default function BillingPage() {
         </p>
       )}
 
-      {/* ── Customer Details Section ── */}
       <div className="billing-section">
         <div
-          className={
-            "billing-section-header" +
-            (selectedCustomer ? " selected" : "")
-          }
+          className={"billing-section-header" + (selectedCustomer ? " selected" : "")}
         >
           Customer Details
         </div>
-
         <div className="billing-section-body">
           {!selectedCustomer ? (
-            // No customer yet: show big ADD button (image8)
             <div className="add-btn-center">
               <button
                 className="btn-add"
@@ -436,7 +362,6 @@ export default function BillingPage() {
               </button>
             </div>
           ) : (
-            // Customer selected: show their info (image10 / image12)
             <div>
               <div className="customer-info-row">
                 <span className="info-label">Name</span>
@@ -464,7 +389,6 @@ export default function BillingPage() {
                   )}
                 </span>
               </div>
-              {/* Allow changing the customer */}
               <button
                 className="btn btn-cancel"
                 style={{ marginTop: 12, fontSize: 12, padding: "5px 14px" }}
@@ -477,14 +401,11 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* ── Items Section (only visible after customer is chosen) ── */}
       {selectedCustomer && (
         <div className="billing-section">
           <div className="billing-section-header">Items</div>
           <div className="billing-section-body">
-
             {billingItems.length === 0 ? (
-              // No items yet: show big ADD button (image10)
               <div className="add-btn-center">
                 <button
                   className="btn-add"
@@ -495,7 +416,6 @@ export default function BillingPage() {
                 </button>
               </div>
             ) : (
-              // Items selected: show table with qty stepper + total (image12)
               <>
                 <table className="billing-items-table">
                   <thead>
@@ -513,34 +433,20 @@ export default function BillingPage() {
                         <tr key={li.item_id}>
                           <td>{li.item.name}</td>
                           <td style={{ textAlign: "center" }}>
-                            {/* Quantity stepper (matches image12) */}
                             <div
                               className="qty-stepper"
                               style={{ display: "inline-flex" }}
                             >
-                              <button
-                                onClick={() =>
-                                  handleQtyChange(li.item_id, 1)
-                                }
-                              >
+                              <button onClick={() => handleQtyChange(li.item_id, 1)}>
                                 +
                               </button>
                               <span className="qty-value">{li.quantity}</span>
-                              <button
-                                onClick={() =>
-                                  handleQtyChange(li.item_id, -1)
-                                }
-                              >
+                              <button onClick={() => handleQtyChange(li.item_id, -1)}>
                                 −
                               </button>
                             </div>
                           </td>
-                          <td
-                            style={{
-                              textAlign: "right",
-                              fontWeight: 600,
-                            }}
-                          >
+                          <td style={{ textAlign: "right", fontWeight: 600 }}>
                             {formatAmount(lineTotal)}
                           </td>
                         </tr>
@@ -548,8 +454,6 @@ export default function BillingPage() {
                     })}
                   </tbody>
                 </table>
-
-                {/* GST row */}
                 {!isGSTRegistered && (
                   <div
                     style={{
@@ -562,19 +466,13 @@ export default function BillingPage() {
                     }}
                   >
                     <span>GST (18%)</span>
-                    <span style={{ fontWeight: 600 }}>
-                      + {formatAmount(gstAmount)}
-                    </span>
+                    <span style={{ fontWeight: 600 }}>+ {formatAmount(gstAmount)}</span>
                   </div>
                 )}
-
-                {/* Total row */}
                 <div className="billing-total-row">
                   <span>Total</span>
                   <span>{formatAmount(totalAmount)}</span>
                 </div>
-
-                {/* "Add more items" button */}
                 <div style={{ marginTop: 12 }}>
                   <button
                     className="btn btn-cancel"
@@ -590,7 +488,6 @@ export default function BillingPage() {
         </div>
       )}
 
-      {/* ── Cancel / Create buttons (image12) ── */}
       {selectedCustomer && billingItems.length > 0 && (
         <div className="billing-actions">
           <button className="btn btn-cancel" onClick={handleCancel}>
@@ -606,7 +503,6 @@ export default function BillingPage() {
         </div>
       )}
 
-      {/* ── Dialogs ── */}
       {showSelectCustomer && (
         <SelectCustomerDialog
           customers={customers}
