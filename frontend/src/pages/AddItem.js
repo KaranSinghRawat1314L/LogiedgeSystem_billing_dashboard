@@ -114,7 +114,7 @@ export default function AddItem() {
 
       </div>
 
-      {/* Cancel / Create */}
+      {/* Cancel and  Create */}
       <div className="form-actions">
         <button className="btn btn-cancel" onClick={handleCancel}>
           Cancel
