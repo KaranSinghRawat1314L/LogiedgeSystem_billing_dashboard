@@ -18,7 +18,7 @@ export default function CustomerList() {
 
   return (
     <div>
-      {/* Header row with ADD button (matches mockup) */}
+      {/* Header row with ADD button */}
       <div className="page-header-row">
         <h1 className="page-title" style={{ margin: 0 }}>CUSTOMERS</h1>
         <button
@@ -39,7 +39,7 @@ export default function CustomerList() {
         </div>
       )}
 
-      {/* 3-column card grid (matches mockup image4) */}
+      {/* 3-column card grid */}
       {!loading && customers.length > 0 && (
         <div className="cards-grid">
           {customers.map((customer) => (
