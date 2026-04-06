@@ -37,6 +37,7 @@ export default function ItemList() {
         <div className="empty-state">No items yet. Click ADD to create one.</div>
       )}
 
+      {/* 3-column card grid (matches mockup image6) */}
       {!loading && items.length > 0 && (
         <div className="cards-grid">
           {items.map((item) => (
